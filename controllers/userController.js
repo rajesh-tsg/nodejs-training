@@ -1,5 +1,6 @@
 const getUser = async (req, res) => {
   try {
+    console.log(req.session.loginSession);
     const userInfo = {
       name: 'Rajesh Mishra',
       age: 25,

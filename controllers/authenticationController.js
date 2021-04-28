@@ -24,7 +24,9 @@ const userLogin = async(req, res) => {
     } else if(req.body.password !== demoUser.password) {
       res.status(401).send({message: 'Invalid password'});
     } else {
-      const token = jwt.sign({ userId: demoUser._id }, config.jwtSecret, { expiresIn: '24h' });
+      const token = jwt.sign(demoUser, config.jwtSecret, { expiresIn: '24h' });
+      req.session.loginSession = demoUser;
+      console.log(req.session.loginSession);
       res.status(200).send({token, message: 'Login Successfull'});
     }
   } catch(e) {
