@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
-const config = require('../config.json')
+const config = require('../config.json');
 
 const demoUser = {
   _id: 22031995,
   email: 'rajesh@studiographene.com',
-  password: 1234567
+  password: "1234567"
 };
 
 const userRegistration = async(req, res) => {
