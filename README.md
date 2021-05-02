@@ -14,3 +14,6 @@ This is a `Demo Application` for NodeJS Training.
 2. MomentJS
 3. Nodemon
 
+> Database Migration Command
+
+```npx sequelize db:migrate```
