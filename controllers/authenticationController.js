@@ -46,21 +46,21 @@ const userLogin = async (req, res) => {
       where: {
         email: req.body.email
       },
-      attributes: ['id', 'name', ['password', 'hashedPass']]
+      attributes: ['id', 'name', 'accType', ['password', 'hashedPass']]
     });
     if (!userData) {
-      res.status(401).send({ message: 'User not found' });
+      res.status(401).send({ message: 'User not found. Please try again' });
     } else {
       userData = userData.toJSON(); //.toJSON returns only the data 
-      // console.log(userData);
+      console.log(userData);
       // console.log(req.body.password, userData.hashedPass)
       const match = await bcrypt.compare(req.body.password, userData.hashedPass);
       // console.log(match);
       if(!match) {
-        res.status(401).send({ message: 'Invalid Password' });
+        res.status(401).send({ message: 'Invalid Password. Please try again' });
       } else {
         const token = jwt.sign({ userId: userData.userID }, config.jwtSecret, { expiresIn: '24h' });
-        res.status(200).send({ token, message: 'Login Successfull' });
+        res.status(200).send({ token: token, userType: userData.accType, message: 'Login Successfull' });
       }
     }
   } catch (e) {
