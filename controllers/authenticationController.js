@@ -6,7 +6,6 @@ const config = require('../config/config.json');
 const db = require("../db/models");
 const User = db.Users;
 const Op = db.Sequelize.Op;
-const config = require('../config.json');
   
 const userRegistration = async(req, res) => {
   try {

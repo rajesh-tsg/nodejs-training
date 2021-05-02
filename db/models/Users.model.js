@@ -32,6 +32,16 @@ module.exports = (sequelize, Sequelize) => {
     gender: {
       type: Sequelize.STRING
     },
+    accType: {
+      type: Sequelize.STRING,
+      allowNull: false,
+      defaultValue: 'user',
+    },
+    isAdmin: {
+      type: Sequelize.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
+    },
     password: {
       type: Sequelize.STRING
     }
