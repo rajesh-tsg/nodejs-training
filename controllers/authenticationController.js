@@ -6,8 +6,9 @@ const config = require('../config/config.json');
 const db = require("../db/models");
 const User = db.Users;
 const Op = db.Sequelize.Op;
-
-const userRegistration = async (req, res) => {
+const config = require('../config.json');
+  
+const userRegistration = async(req, res) => {
   try {
     let postData = req.body;
     postData.userID = `${moment().unix()}-${randomstring.generate({
