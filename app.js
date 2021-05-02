@@ -7,6 +7,8 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 
+const db = require('./db/models/index');
+
 var app = express();
 
 // view engine setup
@@ -26,6 +28,11 @@ app.use('/users', usersRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+db.sequelize.sync({});
+// db.sequelize.sync({ force: true, alter: true }).then(() => {
+//   console.log("Drop and re-sync db.");
+// });
 
 // error handler
 app.use(function(err, req, res, next) {
