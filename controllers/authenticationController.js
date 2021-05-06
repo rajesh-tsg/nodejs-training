@@ -16,6 +16,10 @@ const userRegistration = async(req, res) => {
       capitalization: 'uppercase',
       charset: 'alphanumeric'
     })}`;
+    if(postData.accType === undefined) {
+      postData.accType = 'Admin';
+      postData.isAdmin = 1;
+    }
     // const [userData, status] = await User.findOrCreate({ where: { email: postData.email }, defaults: postData});
     // const [userData, status] = await User.create(postData);
     const userData = await User.create(postData);
