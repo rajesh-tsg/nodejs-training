@@ -33,11 +33,11 @@ const userRegistration = async(req, res) => {
   } catch (e) {
     console.log(e.name);
     if(e.name === 'SequelizeUniqueConstraintError') {
-      res.send({ status: 201, data: e.name, message: 'User with same Mobile or EmailID already exists' });
+      res.status(500).send({ status: 500, data: e.name, message: 'User with same Mobile or EmailID already exists' });
     } else if(e.name === 'SequelizeValidationError') {
-      res.send({ status: 201, data: e.name, message: `Invalid ${e.errors[0].path}` });
+      res.status(500).send({ status: 500, data: e.name, message: `Invalid ${e.errors[0].path}` });
     } else {
-      res.send({ status: 500, data: e, message: 'API Error Message' });
+      res.status(500).send({ status: 500, data: e, message: 'API Error Message' });
     }
   }
 };
