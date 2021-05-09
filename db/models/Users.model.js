@@ -3,8 +3,10 @@ const bcrypt = require("bcrypt");
 module.exports = (sequelize, Sequelize) => {
   const UserModel = sequelize.define("Users", {
     userID: {
-      type: Sequelize.STRING,
-      allowNull: false
+      type: Sequelize.UUID,
+      defaultValue: Sequelize.UUIDV4,
+      allowNull: false,
+      unique: true,
     },
     name: {
       type: Sequelize.STRING
@@ -30,17 +32,18 @@ module.exports = (sequelize, Sequelize) => {
       }
     },
     gender: {
-      type: Sequelize.STRING
+      type: Sequelize.ENUM('Male', 'Female'),
+      allowNull: false
     },
     accType: {
       type: Sequelize.STRING,
       allowNull: false,
-      defaultValue: 'user',
+      defaultValue: 'admin',
     },
     isAdmin: {
       type: Sequelize.INTEGER,
       allowNull: false,
-      defaultValue: 0,
+      defaultValue: 1,
     },
     password: {
       type: Sequelize.STRING

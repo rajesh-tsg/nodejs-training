@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const bcrypt = require("bcrypt");
-const randomstring = require('randomstring');
-const moment = require('moment');
+// const randomstring = require('randomstring');
+// const moment = require('moment');
 const config = require('../config/config.json');
 const db = require("../db/models");
 const User = db.Users;
@@ -10,16 +10,16 @@ const Op = db.Sequelize.Op;
 const userRegistration = async (req, res) => {
   try {
     let postData = req.body;
-    postData.userID = `${moment().unix()}-${randomstring.generate({
-      length: 6,
-      readable: true,
-      capitalization: 'uppercase',
-      charset: 'alphanumeric'
-    })}`;
-    if (postData.accType === undefined) {
-      postData.accType = 'Admin';
-      postData.isAdmin = 1;
-    }
+    // postData.userID = `${moment().unix()}-${randomstring.generate({
+    //   length: 6,
+    //   readable: true,
+    //   capitalization: 'uppercase',
+    //   charset: 'alphanumeric'
+    // })}`;
+    // if (postData.accType === undefined) {
+    //   postData.accType = 'Admin';
+    //   postData.isAdmin = 1;
+    // }
     // const [userData, status] = await User.findOrCreate({ where: { email: postData.email }, defaults: postData});
     // const [userData, status] = await User.create(postData);
     const userData = await User.create(postData);
@@ -66,6 +66,7 @@ const userLogin = async (req, res) => {
         const token = jwt.sign({ userId: userData.userID, isActive: true, userType: userData.accType }, config.jwtSecret, { expiresIn: '24h' });
         let sessionData = req.session;
         sessionData.user = {};
+        sessionData.token = token;
         sessionData.user.name = userData.name;
         sessionData.user.email = userData.email;
         sessionData.user.userType = userData.accType;
