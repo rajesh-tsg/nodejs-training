@@ -206,7 +206,7 @@
       success: function success(result) {
         // console.log(result, result.userType);
         window.localStorage.setItem('token', result.token);
-        window.location.href = '/users/dashboard?userType=' + result.userType;
+        window.location.href = '/users/dashboard';
       },
       error: function error(error) {
         console.log(error);

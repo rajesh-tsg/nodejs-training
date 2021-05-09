@@ -4,6 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var expressLayouts = require('express-ejs-layouts');
+var session = require('express-session');
 
 
 var indexRouter = require('./routes/index');
@@ -14,6 +15,8 @@ var applicationRouter = require('./routes/applications');
 const db = require('./db/models/index');
 
 var app = express();
+
+app.use(session({resave: true, saveUninitialized: true, secret: 'XCR3rsasa%RDHHH', cookie: { maxAge: 60000 }}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -36,9 +39,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
+
+app.use(function(req, res, next) {
+  res.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  next();
+});
+
+app.use('/', indexRouter, (req, res, next) => {
+  res.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  next();
+});
 app.use('/users', usersRouter);
-app.use('/users', dashboardRouter);
+app.use('/users', dashboardRouter, (req, res, next) => {
+  res.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
+  next();
+});
 app.use('/applications', applicationRouter);
 
 // catch 404 and forward to error handler
