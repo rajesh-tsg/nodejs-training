@@ -72,6 +72,10 @@ module.exports = (sequelize, Sequelize) => {
     appliedFor: {
       type: Sequelize.STRING,
       allowNull: false,
+    },
+    country: {
+      type: Sequelize.STRING,
+      allowNull: false,
     }
   });
 

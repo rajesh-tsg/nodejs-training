@@ -16,7 +16,7 @@ const db = require('./db/models/index');
 
 var app = express();
 
-app.use(session({resave: true, saveUninitialized: true, secret: 'XCR3rsasa%RDHHH', cookie: { maxAge: 60000 }}));
+app.use(session({resave: true, saveUninitialized: true, secret: 'XCR3rsasa%RDHHH', cookie: { }}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
