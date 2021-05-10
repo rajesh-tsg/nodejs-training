@@ -24,7 +24,7 @@
                     <div class="card card-stats">
                       <!-- Card body -->
                       <div id="timelineCards"></div>
-                      <div class="card-body">
+                      <div id="scheduleInterviewBtn" class="card-body">
                         <p class="text-center">
                           <a href="#" class="btn btn-primary btn-sm">
                             <i class="fa fa-plus"></i> Schedule Interview
@@ -50,20 +50,20 @@
                         </div>
                       </div>
                       <div class="row align-items-center">
-                        <div class="col-12 text-right">
+                        <div id="acceptRejectBtns" class="col-12 text-right">
                           <a href="#" class="btn btn-sm btn-success">
                             <i class="fa fa-check"></i> Select
                           </a>
-                          <a href="#" class="btn btn-sm btn-danger">
+                          <a href="#" onclick="reject()" class="btn btn-sm btn-danger">
                             <i class="fa fa-times"></i> Reject
                           </a>
                         </div>
                       </div>
                     </div>
                     <div class="card-body">
-                      <div class="alert alert-default" role="alert">
+                      <div id="hrComment" class="alert alert-default" role="alert">
                         <span class="alert-icon"><i class="fa fa-bullhorn"></i></span>
-                        <span class="alert-text"><strong>HR Feedback!</strong> This is the final feedback filled by HR Department</span>
+                        <span class="alert-text"><strong>HR Feedback!</strong> <span id="comment"></span></span>
                       </div>
                       <form>
                         <h6 class="heading-small text-muted mb-4">Applicant information</h6>
@@ -114,14 +114,14 @@
                         <div class="pl-lg-4">
                           <div class="form-group">
                             <label class="form-control-label">Bio</label>
-                            <textarea rows="4" class="form-control" id="bio"
+                            <textarea rows="4" class="form-control" id="bio" readonly
                               placeholder="A few words about you ..."></textarea>
                           </div>
                         </div>
                         <div class="pl-lg-4">
                           <div class="form-group">
                             <label class="form-control-label">Skills</label>
-                            <textarea rows="4" class="form-control" id="skills" placeholder="My skills ..."></textarea>
+                            <textarea rows="4" class="form-control" id="skills" readonly placeholder="My skills ..."></textarea>
                           </div>
                         </div>
                         <hr class="my-4" />
@@ -205,20 +205,30 @@
             $("#noticePeriod").text(result.noticePeriod + ' days');
             $("#category").text(result.category);
             $("#appliedFor").text(result.appliedFor);
-            var appliedSince = moment(result.appliedOn, 'DD/MM/YYYY').toNow();
-            $("#appliedOn").text(result.appliedOn + ' (' + appliedSince + ')');
+            var appliedSince = moment(result.appliedOn, 'DD/MM/YYYY hh:mm:ss A').fromNow();
+            $("#appliedOn").text(moment(result.appliedOn).format('DD/MM/YYYY') + ' (' + appliedSince + ')');
             $("#country").text(result.country);
             $("#skills").text(result.skills);
             $("#referrerEmployeeID").text(result.referrerEmployeeID);
             $("#category").text(result.category);
+            if(result.comment === '' || result.comment === null) {
+              $("#hrComment").hide();
+            } else {
+              $("#hrComment").show();
+              $("#comment").text(result.comment);
+            }
             if (result.statusCode == 0) {
               $("#status").html('<label class="text-info"><i class="fa fa-circle"></i> ' + result.status + '</label>');
             } else if (result.statusCode == 1 || result.statusCode == 2 || result.statusCode == 3) {
               $("#status").html('<label class="text-warning"><i class="fa fa-circle"></i> ' + result.status + '</label>');
             } else if (result.statusCode == 4) {
               $("#status").html('<label class="text-success"><i class="fa fa-circle"></i> ' + result.status + '</label>');
+              $("#acceptRejectBtns").hide();
+              $("#scheduleInterviewBtn").hide();
             } else if (result.statusCode == 5) {
               $("#status").html('<label class="text-danger"><i class="fa fa-circle"></i> ' + result.status + '</label>');
+              $("#acceptRejectBtns").hide();
+              $("#scheduleInterviewBtn").hide();
             }
           },
           error: function error(error) {
@@ -269,5 +279,13 @@
             errorNotification(error.responseJSON.message);
           }
         })
+      }
+      
+      function reject() {
+        var data = {
+          statusCode: 5,
+          status: 'Rejected'
+        };
+        confirmAlertWithReason('/applications/api/v1/confirm-candidate/' + applicationId, token, data);
       }
     </script>

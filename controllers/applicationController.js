@@ -55,7 +55,7 @@ const getApplicantProfile = async(req, res) => {
     applicantData = applicantData.toJSON();
     applicantData.category = (applicantData.isFresher === false ? 'Experienced' : 'Fresher');
     applicantData.experience = Math.floor(applicantData.experience/12) || 0;
-    applicantData.appliedOn = moment(applicantData.createdAt).format('DD/MM/YYYY');
+    applicantData.appliedOn = moment(applicantData.createdAt).format('DD/MM/YYYY hh:mm:ss A');
     // console.log(applicantData);
     // console.log(applicantData.isFresher === false ? 'Experienced' : 'Fresher');
     res.status(200).send({status: 200, data: applicantData, message: 'Applicant Data Fetched'});
@@ -117,6 +117,27 @@ const addTimeline = async(req, res) => {
   }
 };
 
+const updateApplicationStatus = async(req, res) => {
+  try {
+    let postData = req.body;
+    postData.applicantID = req.params.applicationid;
+    console.log(postData);
+    await Applicants.update({
+      statusCode: postData.statusCode,
+      status: postData.status,
+      comment: postData.reason
+    }, {
+      where: {
+        applicantID: req.params.applicationid,
+      }
+    });
+    res.status(200).send({status: 200, message: `Application ${postData.status} successfully`});
+  } catch(e) {
+    console.log(e);
+    res.status(500).send({status: 500, data: e, message: 'API Error'});
+  }
+};
+
 module.exports = {
   applicants,
   applicantProfile,
@@ -124,4 +145,5 @@ module.exports = {
   getApplicantProfile,
   getTimeline,
   addTimeline,
+  updateApplicationStatus,
 };
