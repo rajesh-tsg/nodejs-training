@@ -13,6 +13,7 @@ This is a `Demo Application` for NodeJS Training.
 1. Lodash
 2. MomentJS
 3. Nodemon
+4. change-case (```https://www.npmjs.com/package/change-case```)
 
 > Database Migration Command
 
