@@ -11,6 +11,7 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var dashboardRouter = require('./routes/dashboard');
 var applicationRouter = require('./routes/applications');
+var openingRoute = require('./routes/openings');
 
 const db = require('./db/models/index');
 
@@ -55,6 +56,7 @@ app.use('/users', dashboardRouter, (req, res, next) => {
   next();
 });
 app.use('/applications', applicationRouter);
+app.use('/openings', openingRoute);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -5,170 +5,173 @@
         <div class="container-fluid">
           <div class="header-body">
             <%- include('./../common/location') %>
-              <!-- Page content -->
-              <div class="row">
-                <div class="col-xl-4 order-xl-2">
-                  <div class="card">
-                    <div class="card-header">
-                      <div class="row align-items-center">
-                        <div class="col-12">
-                          <h3 class="mb-0">Timeline</h3>
-                        </div>
-                        <!-- <div class="col-8 text-right">
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid mt--6">
+        <!-- Page content -->
+        <div class="row">
+          <div class="col-xl-4 order-xl-2">
+            <div class="card">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col-12">
+                    <h3 class="mb-0">Timeline</h3>
+                  </div>
+                  <!-- <div class="col-8 text-right">
                           <a href="#" class="btn btn-primary btn-sm">
                             <i class="fa fa-plus"></i> Schedule Interview
                           </a>
                         </div> -->
-                      </div>
-                    </div>
-                    <div class="card card-stats">
-                      <!-- Card body -->
-                      <div id="timelineCards"></div>
-                      <div id="scheduleInterviewBtn" class="card-body">
-                        <p class="text-center">
-                          <a href="#" class="btn btn-primary btn-sm">
-                            <i class="fa fa-plus"></i> Schedule Interview
-                          </a>
-                        </p>
-                      </div>
-                    </div>
+                </div>
+              </div>
+              <div class="card card-stats">
+                <!-- Card body -->
+                <div id="timelineCards"></div>
+                <div id="scheduleInterviewBtn" class="card-body">
+                  <p class="text-center">
+                    <a href="#" class="btn btn-primary btn-sm">
+                      <i class="fa fa-plus"></i> Schedule Interview
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 order-xl-1">
+            <div class="card">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col-8">
+                    <h3 class="mb-0">Applicant Profile
+                      <a href="#" class="text-warning">
+                        <small>( <i class="fa fa-paperclip"></i> View Attached CV)</small>
+                      </a>
+                    </h3>
+                  </div>
+                  <div class="col-4 text-right">
+                    <div id="status"></div>
                   </div>
                 </div>
-                <div class="col-xl-8 order-xl-1">
-                  <div class="card">
-                    <div class="card-header">
-                      <div class="row align-items-center">
-                        <div class="col-8">
-                          <h3 class="mb-0">Applicant Profile
-                            <a href="#" class="text-warning">
-                              <small>( <i class="fa fa-paperclip"></i> View Attached CV)</small>
-                            </a>
-                          </h3>
-                        </div>
-                        <div class="col-4 text-right">
-                          <div id="status"></div>
-                        </div>
-                      </div>
-                      <div class="row align-items-center">
-                        <div id="acceptRejectBtns" class="col-12 text-right">
-                          <a href="#" class="btn btn-sm btn-success">
-                            <i class="fa fa-check"></i> Select
-                          </a>
-                          <a href="#" onclick="reject()" class="btn btn-sm btn-danger">
-                            <i class="fa fa-times"></i> Reject
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card-body">
-                      <div id="hrComment" class="alert alert-default" role="alert">
-                        <span class="alert-icon"><i class="fa fa-bullhorn"></i></span>
-                        <span class="alert-text"><strong>HR Feedback!</strong> <span id="comment"></span></span>
-                      </div>
-                      <form>
-                        <h6 class="heading-small text-muted mb-4">Applicant information</h6>
-                        <div class="pl-lg-4">
-                          <div class="row">
-                            <div class="col-lg-12">
-                              <div class="form-group">
-                                <label class="form-control-label" for="input-username">Name</label>
-                                <label id="name" class="form-control">{{NAME}}<label>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-4">
-                              <div class="form-group">
-                                <label class="form-control-label" for="category">Category</label>
-                                <label id="category" class="form-control">{{CATEGORY}}<label>
-                              </div>
-                            </div>
-                            <div class="col-lg-4">
-                              <div class="form-group">
-                                <label class="form-control-label" for="experience">Experience</label>
-                                <label id="experience" class="form-control">{{EXPERIENCE}}<label>
-                              </div>
-                            </div>
-                            <div class="col-lg-4">
-                              <div class="form-group">
-                                <label class="form-control-label" for="noticePeriod">Notice Period</label>
-                                <label id="noticePeriod" class="form-control">{{NOTICE PERIOD}}<label>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label class="form-control-label" for="appliedFor">Applied For</label>
-                                <label id="appliedFor" class="form-control">{{APPLIED FOR}}<label>
-                              </div>
-                            </div>
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label class="form-control-label" for="appliedOn">Applied On</label>
-                                <label id="appliedOn" class="form-control">{{APPLIED ON}}<label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <div class="pl-lg-4">
-                          <div class="form-group">
-                            <label class="form-control-label">Bio</label>
-                            <textarea rows="4" class="form-control" id="bio" readonly
-                              placeholder="A few words about you ..."></textarea>
-                          </div>
-                        </div>
-                        <div class="pl-lg-4">
-                          <div class="form-group">
-                            <label class="form-control-label">Skills</label>
-                            <textarea rows="4" class="form-control" id="skills" readonly placeholder="My skills ..."></textarea>
-                          </div>
-                        </div>
-                        <hr class="my-4" />
-                        <!-- Address -->
-                        <h6 class="heading-small text-muted mb-4">Contact informations</h6>
-                        <div class="pl-lg-4">
-                          <div class="row">
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label class="form-control-label" for="email">Email Id</label>
-                                <label id="email" class="form-control">{{EMAIL}}<label>
-                              </div>
-                            </div>
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label class="form-control-label" for="mobile">Mobile</label>
-                                <label id="mobile" class="form-control">{{MOBILE}}<label>
-                              </div>
-                            </div>
-                          </div>
-                          <div class="row">
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label class="form-control-label" for="country">Country</label>
-                                <label id="country" class="form-control">{{COUNTRY}}</label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        <hr class="my-4" />
-                        <!-- Description -->
-                        <h6 class="heading-small text-muted mb-4">Other informations</h6>
-                        <div class="pl-lg-4">
-                          <div class="row">
-                            <div class="col-lg-6">
-                              <div class="form-group">
-                                <label class="form-control-label" for="referrerEmployeeID">Referrer</label>
-                                <label id="referrerEmployeeID" class="form-control">{{REFERRER}}<label>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </form>
-                    </div>
+                <div class="row align-items-center">
+                  <div id="acceptRejectBtns" class="col-12 text-right">
+                    <a href="#" onclick="select()" class="btn btn-sm btn-success">
+                      <i class="fa fa-check"></i> Select
+                    </a>
+                    <a href="#" onclick="reject()" class="btn btn-sm btn-danger">
+                      <i class="fa fa-times"></i> Reject
+                    </a>
                   </div>
                 </div>
               </div>
+              <div class="card-body">
+                <div id="hrComment" class="alert alert-default" role="alert">
+                  <span class="alert-icon"><i class="fa fa-bullhorn"></i></span>
+                  <span class="alert-text"><strong>HR Feedback!</strong> <span id="comment"></span></span>
+                </div>
+                <form>
+                  <h6 class="heading-small text-muted mb-4">Applicant information</h6>
+                  <div class="pl-lg-4">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="form-group">
+                          <label class="form-control-label" for="input-username">Name</label>
+                          <label id="name" class="form-control">{{NAME}}<label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="category">Category</label>
+                          <label id="category" class="form-control">{{CATEGORY}}<label>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="experience">Experience</label>
+                          <label id="experience" class="form-control">{{EXPERIENCE}}<label>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="noticePeriod">Notice Period</label>
+                          <label id="noticePeriod" class="form-control">{{NOTICE PERIOD}}<label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="appliedFor">Applied For</label>
+                          <label id="appliedFor" class="form-control">{{APPLIED FOR}}<label>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="appliedOn">Applied On</label>
+                          <label id="appliedOn" class="form-control">{{APPLIED ON}}<label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pl-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label">Bio</label>
+                      <textarea rows="4" class="form-control" id="bio" readonly
+                        placeholder="A few words about you ..."></textarea>
+                    </div>
+                  </div>
+                  <div class="pl-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label">Skills</label>
+                      <textarea rows="4" class="form-control" id="skills" readonly
+                        placeholder="My skills ..."></textarea>
+                    </div>
+                  </div>
+                  <hr class="my-4" />
+                  <!-- Address -->
+                  <h6 class="heading-small text-muted mb-4">Contact informations</h6>
+                  <div class="pl-lg-4">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="email">Email Id</label>
+                          <label id="email" class="form-control">{{EMAIL}}<label>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="mobile">Mobile</label>
+                          <label id="mobile" class="form-control">{{MOBILE}}<label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="country">Country</label>
+                          <label id="country" class="form-control">{{COUNTRY}}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <hr class="my-4" />
+                  <!-- Description -->
+                  <h6 class="heading-small text-muted mb-4">Other informations</h6>
+                  <div class="pl-lg-4">
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="referrerEmployeeID">Referrer</label>
+                          <label id="referrerEmployeeID" class="form-control">{{REFERRER}}<label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -190,7 +193,7 @@
       function fetchCandidateProfile() {
         $.ajax({
           type: "GET",
-          url: "/applications/api/v1/" + applicationId,
+          url: "/applications/api/v1/applicant/" + applicationId,
           beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + token);
           },
@@ -211,7 +214,7 @@
             $("#skills").text(result.skills);
             $("#referrerEmployeeID").text(result.referrerEmployeeID);
             $("#category").text(result.category);
-            if(result.comment === '' || result.comment === null) {
+            if (result.comment === '' || result.comment === null) {
               $("#hrComment").hide();
             } else {
               $("#hrComment").show();
@@ -280,12 +283,21 @@
           }
         })
       }
-      
+
       function reject() {
         var data = {
           statusCode: 5,
           status: 'Rejected'
         };
-        confirmAlertWithReason('/applications/api/v1/confirm-candidate/' + applicationId, token, data);
+        confirmAlertWithReason('/applications/api/v1/confirm-reject-candidate/' + applicationId, token, data);
+      }
+
+      function select() {
+        // alert(applicationId);
+        var data = {
+          statusCode: 4,
+          status: 'Selected'
+        };
+        confirmAlertWithReason('/applications/api/v1/confirm-reject-candidate/' + applicationId, token, data);
       }
     </script>

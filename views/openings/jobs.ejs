@@ -15,19 +15,18 @@
             <div class="card">
               <!-- Card header -->
               <div class="card-header border-0">
-                <h3 class="mb-0">Applicants</h3>
+                <h3 class="mb-0">Job Openings</h3>
               </div>
               <!-- Light table -->
               <div class="table-responsive">
                 <table class="table align-items-center table-flush">
                   <thead class="thead-light">
                     <tr>
-                      <th scope="col" class="sort" data-sort="name">Candidate</th>
-                      <th scope="col" class="sort" data-sort="budget">Type</th>
-                      <th scope="col" class="sort" data-sort="status">Status</th>
-                      <th scope="col" class="sort" data-sort="completion">Applied For</th>
-                      <th scope="col">Applied On</th>
-                      <th scope="col">Action</th>
+                      <th scope="col" class="sort" data-sort="name">Opening</th>
+                      <th scope="col" class="sort" data-sort="budget">Department</th>
+                      <th scope="col" class="sort" data-sort="status">Location</th>
+                      <th scope="col" class="sort" data-sort="completion">Posted On</th>
+                      <th scope="col">Status</th>
                     </tr>
                   </thead>
                   <tbody id="tr" class="list">
@@ -72,12 +71,12 @@
     $(() => {
       token = window.localStorage.getItem('token');
       // console.log(token);
-      fetchApplicants();
+      fetchJobOpenings();
     });
-    function fetchApplicants() {
+    function fetchJobOpenings() {
       $.ajax({
         type: "GET",
-        url: "/applications/api/v1/get-applicants",
+        url: "/openings/api/v1/get-openings",
         beforeSend: function (xhr) {
           xhr.setRequestHeader("Authorization", "Bearer " + token);
         },
@@ -86,16 +85,14 @@
           result = result.data;
           var tr = '';
           result.map((i) => {
-            let appliedSince = moment(i.appliedOn).fromNow();
-            let actionBtns = '';
-            if (i.statusCode == 0 || i.statusCode == 1 || i.statusCode == 2 || i.statusCode == 3) {
-              actionBtns = '<td class="text-right"><div class="dropdown"> <a class="btn btn-sm btn-success" href="#" onclick="select(\'' + i.applicantID + '\')" role="button"> <i class="fas fa-vote-yea"></i> Select </a> <a class="btn btn-sm btn-danger" href="#" onclick="reject(\'' + i.applicantID + '\')" role="button"> <i class="fas fa-minus-circle"></i> Reject </a></div></td>';
-            } else if (i.statusCode == 4) {
-              actionBtns = '<td class="text-right"><span class="badge-md badge-pill badge-success">' + i.status + '</span></td>';
-            } else if (i.statusCode == 5) {
-              actionBtns = '<td class="text-right"><span class="badge-md badge-pill badge-danger">' + i.status + '</span></td>';
+            let appliedSince = moment(i.updatedAt).fromNow();
+            let status = '';
+            if (i.status == "ACTIVE") {
+              status = '<button class="btn btn-success btn-sm" onclick="activeInactive(0, \''+i.id+'\')">' + i.status + '</button>';
+            } else if (i.status == "INACTIVE") {
+              status = '<button class="btn btn-danger btn-sm" onclick="activeInactive(1, \''+i.id+'\')">' + i.status + '</button>';
             }
-            tr += '<tr><th scope="row"><div class="media align-items-center"><div class="media-body"> <a href="/applications/applicants/profile/' + i.applicantID + '"> <span class="name mb-0 text-sm">' + i.candidate + '</span> </a></div></div></th><td class="budget"> ' + i.type + '</td><td><b class="status">' + i.status + '</b> </span></td><td><div class="d-flex align-items-center"> <span class="completion mr-2">' + i.appliedFor + '</span></div></td><td><div class="d-flex align-items-center"> <span class="completion mr-2">' + moment(i.appliedOn).format('DD/MM/YYYY') + ' (' + appliedSince + ')' + '</span></div></td>' + actionBtns + '</tr>';
+            tr += '<tr><th scope="row"><div class="media align-items-center"><div class="media-body"> <a href="/applications/applicants/profile/' + i.id + '"> <span class="name mb-0 text-sm">' + i.openingName + '</span> </a></div></div></th><td class="budget"> ' + i.department + '</td><td><b class="status">' + i.location + '</b> </span></td><td><div class="d-flex align-items-center"> <span class="completion mr-2">' + moment(i.updatedAt).format('DD/MM/YYYY') + ' (' + appliedSince + ')' + '</span></div></td><td><div class="d-flex align-items-center">'+ status +'</div></td></tr>';
           });
           $("#tr").html(tr);
         },
@@ -107,21 +104,11 @@
       })
     }
 
-    function reject(applicationId) {
-      // alert(applicationId);
+    function activeInactive(status, openingId) {
+      // alert(openingId);
       var data = {
-        statusCode: 5,
-        status: 'Rejected'
+        status: status
       };
-      confirmAlertWithReason('/applications/api/v1/confirm-reject-candidate/' + applicationId, token, data);
-    }
-
-    function select(applicationId) {
-      // alert(applicationId);
-      var data = {
-        statusCode: 4,
-        status: 'Selected'
-      };
-      confirmAlertWithReason('/applications/api/v1/confirm-reject-candidate/' + applicationId, token, data);
+      confirmAction('/openings/api/v1/update-opening-status/' + openingId, token, data);
     }
   </script>

@@ -3,6 +3,8 @@ const moment = require('moment');
 const db = require("../db/models");
 const Applicants = db.Applicants;
 const Timeline = db.Timeline;
+const sequelize = require("sequelize");
+const { Sequelize } = require("sequelize");
 
 const path = 'Applications';
 
@@ -138,10 +140,47 @@ const updateApplicationStatus = async(req, res) => {
   }
 };
 
+const addApplicant = async(req, res) => {
+  try {
+    let postData = req.body;
+    console.log(postData);
+    const data = await Applicants.create(postData);
+    res.status(200).send({status: 200, message: `Application submitted successfully`});
+  } catch(e) {
+    console.log(e.name);
+    if (e.name === 'SequelizeUniqueConstraintError') {
+      res.status(500).send({ status: 500, data: e.name, message: 'User with same Mobile or EmailID already exists' });
+    } else if (e.name === 'SequelizeValidationError') {
+      res.status(500).send({ status: 500, data: e.name, message: `Invalid ${e.errors[0].path}` });
+    } else {
+      res.status(500).send({ status: 500, data: e, message: 'API Error Message' });
+    }
+  }
+};
+
+const getApplicants = async(req, res) => {
+  try {
+    const data = await Applicants.findAll({
+      order: [['createdAt', 'DESC']],
+      attributes: ['applicantID', 
+      ['name', 'candidate'], 
+      [Sequelize.literal(`CASE WHEN isFresher = true THEN 'Fresher' ELSE 'Experienced' END`), 'type'],
+      'statusCode', 'status', 'appliedFor',
+      ['createdAt', 'appliedOn']
+    ]
+    });
+    res.status(200).send({status: 200, data, message: `Applications fetched successfully`});
+  } catch(e) {
+    console.log(e);
+    res.status(500).send({ status: 500, data: e, message: 'API Error Message' });
+  }
+};
+
 module.exports = {
+  addApplicant,
   applicants,
   applicantProfile,
-  // getApplicants,
+  getApplicants,
   getApplicantProfile,
   getTimeline,
   addTimeline,

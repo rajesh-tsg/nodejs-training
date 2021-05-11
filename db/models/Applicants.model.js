@@ -29,7 +29,7 @@ module.exports = (sequelize, Sequelize) => {
     },
     experience: {
       type: Sequelize.INTEGER,
-      validate: { //https://sequelize.org/v5/manual/models-definition.html#per-attribute-validations
+      validate: { // https://sequelize.org/v5/manual/models-definition.html#per-attribute-validations
         isInt: true,
       }
     },
@@ -57,10 +57,12 @@ module.exports = (sequelize, Sequelize) => {
     statusCode: {
       type: Sequelize.INTEGER,
       allowNull: false,
+      defaultValue: 0,
     },
     status: {
       type: Sequelize.STRING,
       allowNull: false,
+      defaultValue: 'Applied',
     },
     comment: {
       type: Sequelize.TEXT,
