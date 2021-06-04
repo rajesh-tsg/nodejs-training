@@ -67,11 +67,11 @@ module.exports = (sequelize, Sequelize) => {
           }
         },
         beforeUpdate(user, options) {
-          // console.log(user.toJSON().password);
+          console.log(user.toJSON().password);
           if(user.toJSON().password) {
             return bcrypt.hash(user.toJSON().password, 10)
             .then(hash => {
-              // console.log(hash);
+              console.log(hash);
               // user.toJSON().password = hash;
               user.set('password', hash);
             })
@@ -80,7 +80,22 @@ module.exports = (sequelize, Sequelize) => {
               throw new Error();
             });
           }
-        }
+        },
+        // beforeBulkUpdate(user, options) {
+        //   console.log(user);
+        //   if(user.attributes.password) {
+        //     return bcrypt.hash(user.attributes.password, 10)
+        //     .then(hash => {
+        //       console.log(hash);
+        //       // user.toJSON().password = hash;
+        //       user.attributes.password = hash;
+        //     })
+        //     .catch(err => {
+        //       console.log(err)
+        //       throw new Error();
+        //     });
+        //   }
+        // }
       }
     }
   );

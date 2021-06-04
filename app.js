@@ -6,18 +6,27 @@ var logger = require('morgan');
 var expressLayouts = require('express-ejs-layouts');
 var session = require('express-session');
 
+var SequelizeStore = require("connect-session-sequelize")(session.Store);
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var dashboardRouter = require('./routes/dashboard');
 var applicationRouter = require('./routes/applications');
 var openingRoute = require('./routes/openings');
+var publicRouter = require('./routes/public');
 
 const db = require('./db/models/index');
 
 var app = express();
 
-app.use(session({resave: true, saveUninitialized: true, secret: 'XCR3rsasa%RDHHH', cookie: { }}));
+app.use(session({
+  store: new SequelizeStore({
+    db: db.sequelize,
+    checkExpirationInterval: 15 * 60 * 1000, // The interval at which to cleanup expired sessions in milliseconds.
+    expiration: 24 * 60 * 60 * 1000 // The maximum age (in milliseconds) of a valid session.
+  }),
+  resave: true, saveUninitialized: true, secret: 'XCR3rsasa%RDHHH', cookie: { }}));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -46,12 +55,11 @@ app.use(function(req, res, next) {
   next();
 });
 
-app.use('/', indexRouter, (req, res, next) => {
+app.use('/', indexRouter, publicRouter, (req, res, next) => {
   res.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
   next();
 });
-app.use('/users', usersRouter);
-app.use('/users', dashboardRouter, (req, res, next) => {
+app.use('/users', usersRouter, dashboardRouter, (req, res, next) => {
   res.set('Cache-Control', 'private, no-cache, no-store, must-revalidate');
   next();
 });

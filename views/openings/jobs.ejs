@@ -92,7 +92,7 @@
             } else if (i.status == "INACTIVE") {
               status = '<button class="btn btn-danger btn-sm" onclick="activeInactive(1, \''+i.id+'\')">' + i.status + '</button>';
             }
-            tr += '<tr><th scope="row"><div class="media align-items-center"><div class="media-body"> <a href="/applications/applicants/profile/' + i.id + '"> <span class="name mb-0 text-sm">' + i.openingName + '</span> </a></div></div></th><td class="budget"> ' + i.department + '</td><td><b class="status">' + i.location + '</b> </span></td><td><div class="d-flex align-items-center"> <span class="completion mr-2">' + moment(i.updatedAt).format('DD/MM/YYYY') + ' (' + appliedSince + ')' + '</span></div></td><td><div class="d-flex align-items-center">'+ status +'</div></td></tr>';
+            tr += '<tr><th scope="row"><div class="media align-items-center"><div class="media-body"> <a href="/openings/opening-details/' + i.id + '"> <span class="name mb-0 text-sm">' + i.openingName + '</span> </a></div></div></th><td class="budget"> ' + i.department + '</td><td><b class="status">' + i.location + '</b> </span></td><td><div class="d-flex align-items-center"> <span class="completion mr-2">' + moment(i.updatedAt).format('DD/MM/YYYY') + ' (' + appliedSince + ')' + '</span></div></td><td><div class="d-flex align-items-center">'+ status +'</div></td></tr>';
           });
           $("#tr").html(tr);
         },
@@ -109,6 +109,6 @@
       var data = {
         status: status
       };
-      confirmAction('/api/v1/update-opening-status/' + openingId, token, data);
+      confirmAction('/openings/api/v1/update-opening-status/' + openingId, token, data);
     }
   </script>

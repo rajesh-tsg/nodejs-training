@@ -82,17 +82,68 @@ const userLogin = async (req, res) => {
 const userLogout = async (req, res) => {
   try {
     let sessionData = req.session;
+    const userType = sessionData.user.userType;
     const logout = await sessionData.destroy();
     // console.log(logout);
-    res.redirect('/');
+    if(userType === 'admin') {
+      res.redirect('/admin-login');
+    } else {
+      res.redirect('/');
+    }
   } catch (e) {
     console.log(e);
     res.status(500).send({ error: e, message: 'Logout Failed. Please try again' });
   }
 }
 
+const applicantLogin = async(req, res) => {
+  try {
+    // console.log(req.body.email);
+    let userData = await User.findOne({
+      where: {
+        mobile: req.body.mobile
+      },
+    });
+    if(userData.isAdmin === 1) {
+      res.status(201).send({ message: 'User is Admin. Point to Admin Login' });
+    } else if(userData.isAdmin === 0 && userData.accType === 'applicant') {
+      // Log signup/register events in Visitors table
+      res.status(200).send({ message: 'User registered. Continue login' });
+    } else {
+      res.status(401).send({ message: 'User not found. Redirect to Signup' });
+    }
+  } catch (e) {
+    console.log(e);
+    res.status(500).send({ error: e, message: 'Login failed. Please try again' });
+  }
+}
+
+const forgotPassword = async(req, res) => {
+  try {
+    const postData = req.body;
+    if(postData.newPassword === postData.confirmNewPassword) {
+      await User.update({
+          password: postData.newPassword
+        }, {
+        individualHooks: true,
+        where: {
+          email: postData.email
+        }
+      });
+      res.status(200).send({message: 'Password updated successfully'});
+    } else {
+      res.status(500).send({ message: 'Forgot Password validation failed' });
+    }
+  } catch(e) {
+    console.log(e);
+    res.status(500).send({ error: e, message: 'Forgot Password failed. Please try again' });
+  }
+};
+
 module.exports = {
   userRegistration,
   userLogin,
   userLogout,
+  applicantLogin,
+  forgotPassword,
 };

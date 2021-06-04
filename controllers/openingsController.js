@@ -55,6 +55,26 @@ const jobs = async(req, res) => {
   }
 };
 
+const jobOpeningDetails = async(req, res) => {
+  req.session.path = path;
+  req.session.subpath = cases.sentenceCase('job details');
+  const openingId = req.params.openingid || '';
+  const sessionData = req.session;
+  try {
+    res.render('openings/jobOpeningDetails', {
+      title: 'Openings - Job Details',
+      sessionData,
+      openingId
+    });
+  } catch(e) {
+    res.render('openings/jobOpeningDetails', {
+      title: 'Openings - Job Details',
+      sessionData,
+      openingId
+    });
+  }
+};
+
 const updateJobOpeningStatus = async(req, res) => {
   try {
     let postData = req.body;
@@ -66,7 +86,22 @@ const updateJobOpeningStatus = async(req, res) => {
         id: req.params.openingid,
       }
     });
-    res.status(200).send({status: 200, message: `Job Opening status updated successfully`});
+    res.status(200).send({status: 200, message: `Updating job opening status...`});
+  } catch(e) {
+    console.log(e);
+    res.status(500).send({status: 500, message: 'API Error. Please try again'});
+  }
+};
+
+const getJobOpeningDetails = async(req, res) => {
+  try {
+    const openingId = req.params.openingid;
+    const data = await Openings.findOne({
+      where: {
+        id: openingId,
+      }
+    });
+    res.status(200).send({status: 200, data, message: 'Job details fetched!'});
   } catch(e) {
     console.log(e);
     res.status(500).send({status: 500, message: 'API Error. Please try again'});
@@ -78,4 +113,6 @@ module.exports = {
   getJobOpenings,
   jobs,
   updateJobOpeningStatus,
+  getJobOpeningDetails,
+  jobOpeningDetails,
 }

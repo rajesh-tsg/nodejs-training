@@ -1,0 +1,245 @@
+<%- include('./../common/navbar')%>
+  <div class="main-content" id="panel">
+    <%- include('./../common/header')%>
+      <div class="header bg-primary pb-6">
+        <div class="container-fluid">
+          <div class="header-body">
+            <%- include('./../common/location') %>
+          </div>
+        </div>
+      </div>
+      <div class="container-fluid mt--6">
+        <!-- Page content -->
+        <div class="row">
+          <div class="col-xl-4 order-xl-2">
+            <div class="card">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col-12">
+                    <h3 class="mb-0">Applications Received</h3>
+                  </div>
+                </div>
+              </div>
+              <div class="card card-stats">
+                <div id="timelineCards"></div>
+                <div id="scheduleInterviewBtn" class="card-body">
+                  <p class="text-center">
+                    <a href="#" class="btn btn-primary btn-sm">
+                      <i class="fa fa-plus"></i> Schedule Interview
+                    </a>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-8 order-xl-1">
+            <div class="card">
+              <div class="card-header">
+                <div class="row align-items-center">
+                  <div class="col-9">
+                    <h3 class="mb-0">Job Details</h3>
+                  </div>
+                  <!-- <div class="col-3">
+                    <a href="#" class="btn btn-success btn-sm">
+                      <i class="fa fa-save"></i>
+                      Update Job Details</a>
+                  </div> -->
+                  <div class="col-3" id="actionBtn"></div>
+                </div>
+              </div>
+              <div class="card-body">
+                <form>
+                  <h6 class="heading-small text-muted mb-4">JOb information</h6>
+                  <div class="pl-lg-4">
+                    <div class="row">
+                      <div class="col-lg-12">
+                        <div class="form-group">
+                          <label class="form-control-label" for="openingName">Opening Name</label>
+                          <p id="openingName">{{NAME}}
+                          <p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="department">Department</label>
+                          <p id="department">{{DEPARTMENT}}
+                          <p>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="location">Location</label>
+                          <p id="location">{{LOCATION}}
+                          <p>
+                        </div>
+                      </div>
+                      <div class="col-lg-4">
+                        <div class="form-group">
+                          <label class="form-control-label" for="appliedOn">Compensation</label>
+                          <p id="package">{{PACKAGE}}
+                          <p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="appliedFor">Eligibility</label>
+                          <p id="eligibility">{{ELIGIBILITY}}
+                          <p>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-lg-6">
+                        <div class="form-group">
+                          <label class="form-control-label" for="appliedOn">Skills Required</label>
+                          <p id="skillsRequired">{{SKILLS}}
+                          <p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="pl-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label">Description</label>
+                      <p id="description" style="text-align: justify;">{{DETAILS}}</p>
+                    </div>
+                  </div>
+                  <div class="pl-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label">Responsibilities</label>
+                      <p id="responsibilities" style="text-align: justify;">{{Responsibilities}}</p>
+                    </div>
+                  </div>
+                  <div class="pl-lg-4">
+                    <div class="form-group">
+                      <label class="form-control-label">Selection Process</label>
+                      <p id="process" style="text-align: justify;">{{SELECTION PROCESS}}</p>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  <%- include('./detailsModal')%>
+    <input type="hidden" name="" id="openingId" value="<%= openingId%>">
+
+    <script>
+      var token = '';
+      var openingId = ''
+      $(() => {
+        token = window.localStorage.getItem('token');
+        // console.log(token);
+        openingId = $("#openingId").val() || '';
+        // console.log(applicationId);
+        fetchJobDetails();
+        // fetchCandidateTimeline();
+      });
+      function fetchJobDetails() {
+        $.ajax({
+          type: "GET",
+          url: "/openings/api/v1/job-opening-details/" + openingId,
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+          },
+          success: function success(result) {
+            console.log(result);
+            result = result.data;
+            $("#openingName").text(result.openingName);
+            $("#department").text(result.department);
+            $("#location").text(result.location);
+            $("#package").text(result.package);
+            $("#description").text(result.description);
+            $("#skillsRequired").text(result.skillsRequired);
+            $("#responsibilities").text(result.responsibilities);
+            $("#process").text(result.selectionProcess);
+            $("#eligibility").text(result.eligibility);
+            let status = '';
+            if (result.isActive == true) {
+              status = '<button class="btn btn-danger" onclick="activeInactive(0, \'' + result.id + '\')">DEACTIVATE</button>';
+            } else if (result.isActive == false) {
+              status = '<button class="btn btn-success" onclick="activeInactive(1, \'' + result.id + '\')">ACTIVATE</button>';
+            }
+            $("#actionBtn").html(status);
+          },
+          error: function error(error) {
+            console.log(error, 'error');
+            // $('.custom-container').noty({text: error.responseText.message});
+            errorNotification(error.responseJSON.message);
+          }
+        })
+      };
+
+      function activeInactive(status, openingId) {
+        // alert(openingId);
+        var data = {
+          status: status
+        };
+        confirmAction('/openings/api/v1/update-opening-status/' + openingId, token, data);
+      }
+
+      function fetchCandidateTimeline() {
+        $("#timelineCards").html('');
+        $.ajax({
+          type: "GET",
+          url: "/applications/api/v1/timeline/" + applicationId,
+          beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + token);
+          },
+          success: function success(result) {
+            console.log(result);
+            if (typeof result.data !== Object) {
+              result = result.data;
+              var cards = '';
+              result.map((i) => {
+                let status = '';
+                let detailsBtn = '';
+                let scores = '';
+                if (i.statusCode == 0) {
+                  status = '<span class="text-primary mr-2">' + i.status + '.</span>'
+                } else if (i.statusCode == 1) {
+                  status = '<span class="text-success mr-2">' + i.status + '.</span>';
+                  scores = '<div class="row"><div class="col"><div class="card-profile-stats d-flex justify-content-center"><div> <span class="heading">' + i.logicalAbility + '</span> <span class="description">Logical</span></div><div> <span class="heading">' + i.communication + '</span> <span class="description">Comm.</span></div><div> <span class="heading">' + i.attitude + '</span> <span class="description">Attitude</span></div></div></div></div><div class="row"><div class="col"><p>' + i.feedback + '</p></div></div>';
+                } else if (i.statusCode == 2) {
+                  status = '<span class="text-danger mr-2">' + i.status + '.</span>';
+                  scores = '<div class="row"><div class="col"><div class="card-profile-stats d-flex justify-content-center"><div> <span class="heading">' + i.logicalAbility + '</span> <span class="description">Logical</span></div><div> <span class="heading">' + i.communication + '</span> <span class="description">Comm.</span></div><div> <span class="heading">' + i.attitude + '</span> <span class="description">Attitude</span></div></div></div></div><div class="row"><div class="col"><p>' + i.feedback + '</p></div></div>';
+                }
+                cards += '<div class="card-body"><div class="row"><div class="col"><h5 class="card-title text-uppercase text-muted mb-0">' + i.round + '</h5> <span class="h2 font-weight-bold mb-0">' + i.interviewerName + '</span></div>' + detailsBtn + '</div>' + scores + '<p class="mt-3 mb-0 text-sm"> ' + status + ' <span class="text-nowrap">' + i.date + ' <small> (Slot: ' + i.scheduledSlot + ') </small></span></p></div>';
+                scores = '<div class="row"><div class="col"><div class="card-profile-stats d-flex justify-content-center"><div> <span class="heading">' + i.logicalAbility + '</span> <span class="description">Logical</span></div><div> <span class="heading">' + i.communication + '</span> <span class="description">Comm.</span></div><div> <span class="heading">' + i.attitude + '</span> <span class="description">Attitude</span></div></div></div></div>'
+              });
+              $("#timelineCards").html(cards);
+            } else {
+              $("#timelineCards").html('<div class="card-body"><p class="text-center">' + result.data + '</p></div>');
+            }
+          },
+          error: function error(error) {
+            console.log(error, 'error');
+            // $('.custom-container').noty({text: error.responseText.message});
+            errorNotification(error.responseJSON.message);
+          }
+        })
+      }
+
+      function reject() {
+        var data = {
+          statusCode: 5,
+          status: 'Rejected'
+        };
+        confirmAlertWithReason('/applications/api/v1/confirm-reject-candidate/' + applicationId, token, data);
+      }
+
+      function select() {
+        // alert(applicationId);
+        var data = {
+          statusCode: 4,
+          status: 'Selected'
+        };
+        confirmAlertWithReason('/applications/api/v1/confirm-reject-candidate/' + applicationId, token, data);
+      }
+    </script>

@@ -1,13 +1,14 @@
 module.exports = (req, res, next) => {
   try {
-    console.log('Session Data: ', req.session);
+    console.log(req.session);
+    const redirectUrl = req.originalUrl;
     if (req.session.user) {
       next();
     } else {
-      // throw 'Session Expired';
-      res.redirect('/');
+      res.redirect('/?redirectUrl=' + redirectUrl);
     }
-  } catch {
+  } catch(e) {
+    console.log('Error:', e);
     res.redirect('/');
   }
 };
