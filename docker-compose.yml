@@ -1,0 +1,36 @@
+version: "3.2"
+
+services:
+  trainingproject:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    networks:
+      - training-project
+    volumes:
+      - .:/var/app/training-project
+      - /var/app/training-project/node_modules
+    env_file:
+      - .env # it will overwrite .env file content
+    depends_on:
+      - trainingprojectmysql
+
+  trainingprojectmysql:
+    image: mysql:5
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3308:3306"
+    volumes:
+      - "training-project-mysql:/var/lib/mysql"
+    networks:
+      - training-project
+
+networks:
+  training-project:
+    driver: bridge
+volumes:
+  training-project-mysql:

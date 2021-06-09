@@ -1,10 +1,10 @@
 const dbConfig = require('../../config/db.config');
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
-  host: dbConfig.host,
-  dialect: dbConfig.dialect,
-  // logging: false  //To log all the running queries
+const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USERNAME, process.env.DB_PASSWORD, {
+  host: process.env.DB_HOST,
+  dialect: 'mysql',
+  //logging: false  //To log all the running queries
 });
 
 const db = {};
