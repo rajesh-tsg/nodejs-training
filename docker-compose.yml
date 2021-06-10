@@ -5,6 +5,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    command: npm run watch-node
     ports:
       - "3000:3000"
     networks:
