@@ -1,6 +1,9 @@
 const dbConfig = require('../../config/db.config');
 const Sequelize = require('sequelize');
+const { config } = require('dotenv');
+config();
 
+console.log(process.env.DB_USERNAME);
 const sequelize = new Sequelize(dbConfig.database, dbConfig.username, dbConfig.password, {
   host: dbConfig.host,
   dialect: dbConfig.dialect,
