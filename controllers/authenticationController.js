@@ -104,13 +104,13 @@ const applicantLogin = async(req, res) => {
         mobile: req.body.mobile
       },
     });
-    if(userData.isAdmin === 1) {
+    if(!userData) {
+      res.status(401).send({ message: 'User not found. Redirect to Signup' });
+    } else if(userData.isAdmin === 1) {
       res.status(201).send({ message: 'User is Admin. Point to Admin Login' });
     } else if(userData.isAdmin === 0 && userData.accType === 'applicant') {
       // Log signup/register events in Visitors table
       res.status(200).send({ message: 'User registered. Continue login' });
-    } else {
-      res.status(401).send({ message: 'User not found. Redirect to Signup' });
     }
   } catch (e) {
     console.log(e);
