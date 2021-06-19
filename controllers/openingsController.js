@@ -27,7 +27,7 @@ const getJobOpenings = async(req, res) => {
   try {
     const data = await Openings.findAll({
       order: [['updatedAt', 'DESC']],
-      attributes: ['id', 'openingName', 'location', 'department', 'updatedAt', 
+      attributes: ['openingName', 'location', 'department', 'updatedAt', 
       [Sequelize.literal(`CASE WHEN isActive = true THEN 'ACTIVE' ELSE 'INACTIVE' END`), 'status'],
     ]
     });
